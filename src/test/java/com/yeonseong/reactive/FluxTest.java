@@ -1,13 +1,17 @@
 package com.yeonseong.reactive;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
+@Slf4j
 public class FluxTest {
 
   @Test
-  void FluxCreate() {
+  public void fluxCreate() {
     Flux.<Integer>create(e -> {
           e.next(1);
           e.next(2);
@@ -23,14 +27,14 @@ public class FluxTest {
   }
 
   @Test
-  void FluxRange() {
+  public void fluxRange() {
     Flux.range(1, 10)
         .log()
         .subscribe(System.out::println);
   }
 
   @Test
-  void FluxSubscribeOn() {
+  public void fluxSubscribeOn() {
     Flux.range(1, 10)
         .log()
         .subscribeOn(Schedulers.newSingle("sub"))
@@ -39,7 +43,7 @@ public class FluxTest {
   }
 
   @Test
-  void FluxPublishOn() {
+  public void fluxPublishOn() {
     Flux.range(1, 10)
         .publishOn(Schedulers.newSingle("pub"))
         .log()
@@ -48,7 +52,7 @@ public class FluxTest {
   }
 
   @Test
-  void FluxSubscribeOnPublishOn() {
+  public void fluxSubscribeOnPublishOn() {
     Flux.range(1, 10)
         .publishOn(Schedulers.newSingle("pub"))
         .log()
@@ -56,4 +60,17 @@ public class FluxTest {
         .subscribe(System.out::println);
     System.out.println("Exit");
   }
+
+  @Test
+  public void fluxInterval() throws InterruptedException {
+
+    // DaemonThread
+    Flux.interval(Duration.ofMillis(500))
+        .take(10)
+        .subscribe(s -> log.info("onNext: {}", s));
+
+    log.info("exit");
+    TimeUnit.SECONDS.sleep(10);
+  }
+
 }

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 public class PublisherOperatorSubscriberTest {
 
   @Test
-  void publisherOperatorSubscriber() throws InterruptedException {
+  public void publisherOperatorSubscriber() throws InterruptedException {
 
     Publisher<Integer> publisher = publisher(Stream.iterate(1, a -> a + 1).limit(10).collect(Collectors.toList()));
 
